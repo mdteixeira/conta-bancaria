@@ -2,8 +2,9 @@ package conta_bancaria.util;
 
 // Código vindo do GitHub
 
-public class Cores {
 
+public class Cores {
+	
 		//Reset Color
 		public static final String TEXT_RESET = "\u001B[0m";
 

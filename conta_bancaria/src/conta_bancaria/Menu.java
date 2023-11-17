@@ -2,18 +2,19 @@ package conta_bancaria;
 
 import java.util.Scanner;
 
+import conta_bancaria.model.Conta;
 import conta_bancaria.util.Cores;
 
 public class Menu {
 
 	static Scanner sc = new Scanner(System.in);
 	static final String urlRepo = "https://github.com/mdteixeira/conta-bancaria\n";
-	static final String separador = Cores.TEXT_YELLOW_BOLD_BRIGHT + "*********************************************" + Cores.TEXT_RESET;
+	static final String separador = Cores.TEXT_YELLOW_BOLD_BRIGHT + "*********************************************"
+			+ Cores.TEXT_RESET;
 
 	public static void main(String[] args) {
 
 		int operacao = 0;
-		
 
 		while (operacao != 9) {
 
@@ -53,20 +54,26 @@ public class Menu {
 		}
 
 	}
-	
+
 	private static void Finalizar() {
-		System.out.println("Opção 9 - Sair");
-		
+		System.out.println("\nOpção 9 - Sair\n");
+
 		System.out.println(separador);
 		System.out.println("");
 		System.out.println("\t\tBanco L'Argent");
 		System.out.println("");
 		System.out.println(separador);
-		
+		Creditos();
+
+	}
+	
+	private static void Creditos() {
 		System.out.println(separador);
-		System.out.println("\nProjeto desenvolvido por "+ Cores.TEXT_CYAN_BOLD_BRIGHT+  "Matheus Teixeira" + Cores.TEXT_RESET);
+		System.out.println(
+				"\nProjeto desenvolvido por " + Cores.TEXT_CYAN_BOLD_BRIGHT + "Matheus Teixeira" + Cores.TEXT_RESET);
 		System.out.println("\nCódigo disponível em: \n" + Cores.TEXT_BLUE_UNDERLINED + urlRepo + Cores.TEXT_RESET);
-		System.out.println(separador);
+		System.out.println(separador);		
+
 	}
 
 }
