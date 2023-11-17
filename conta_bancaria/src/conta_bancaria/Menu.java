@@ -20,7 +20,7 @@ public class Menu {
 
 			System.out.println(separador);
 			System.out.println("");
-			System.out.println("\t\tBanco L'Argent");
+			System.out.println("\t\tTyche Bank");
 			System.out.println("");
 			System.out.println(separador);
 			System.out.println("");
@@ -35,7 +35,7 @@ public class Menu {
 			System.out.println("\t9 - Sair");
 			System.out.println("");
 			System.out.println(separador);
-			System.out.println("\n*** Entre com a opção desejada:                          ");
+			System.out.println("\n*** Entre com a opção desejada:");
 			System.out.print("\n >>> ");
 			operacao = sc.nextInt();
 
@@ -60,19 +60,19 @@ public class Menu {
 
 		System.out.println(separador);
 		System.out.println("");
-		System.out.println("\t\tBanco L'Argent");
+		System.out.println("\t\tTyche Bank");
 		System.out.println("");
 		System.out.println(separador);
 		Creditos();
 
 	}
-	
+
 	private static void Creditos() {
 		System.out.println(separador);
 		System.out.println(
 				"\nProjeto desenvolvido por " + Cores.TEXT_CYAN_BOLD_BRIGHT + "Matheus Teixeira" + Cores.TEXT_RESET);
 		System.out.println("\nCódigo disponível em: \n" + Cores.TEXT_BLUE_UNDERLINED + urlRepo + Cores.TEXT_RESET);
-		System.out.println(separador);		
+		System.out.println(separador);
 
 	}
 
