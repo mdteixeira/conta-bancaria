@@ -1,5 +1,7 @@
 package conta_bancaria.model;
 
+import conta_bancaria.util.Cores;
+
 public class Conta {
 
 	private int numero;
@@ -64,21 +66,20 @@ public class Conta {
 		case 2 -> tipo = "Conta Poupança";
 		}
 
-		System.out.println("\n*********************************************");
+		System.out.println(Cores.TEXT_CYAN + "\n---------------------------------------------" + Cores.TEXT_RESET);
 		System.out.println("\t\tDados da Conta\n");
 		System.out.println("\t* Número da Conta: " + this.numero);
 		System.out.println("\t* Agência: " + this.agencia);
 		System.out.println("\t* Tipo da conta: " + tipo);
 		System.out.println("\t* Titular da conta: " + this.titular);
 		System.out.println("\t* Saldo da conta: " + this.saldo);
-		System.out.println("\n*********************************************\n");
 	}
 	///////////////////////////////
 
 	// Sacar dinheiro
 	public boolean Sacar(float valor) {
 		if (this.getSaldo() < valor) {
-			System.out.println("Saldo insuficiente.");
+			System.out.println(Cores.TEXT_RED_BOLD_BRIGHT + "\n\tSaldo Insuficiente. \n" + Cores.TEXT_RESET);
 			return false;
 		}
 		this.setSaldo(this.getSaldo() - valor);
@@ -88,6 +89,7 @@ public class Conta {
 	// Depositar
 	public void depositar(float valor) {
 		this.setSaldo(this.getSaldo() + valor);
+		System.out.printf("\n\tVocê depositou" + Cores.TEXT_GREEN_BOLD_BRIGHT + " R$ %.2f\n" +  Cores.TEXT_RESET, valor);
 	}
 
 }
