@@ -16,19 +16,23 @@ public class ContaController implements ContaRepository {
 
 	@Override
 	public void procurarPorNumero(int numero) {
-		// TODO Auto-generated method stub
+		var conta = buscarNaCollection(numero);
 
+		if (conta != null)
+			conta.visualizar();
+		else
+			System.err.println("Erro: A conta número " + numero + " não foi encontrada.");
 	}
 
 	@Override
 	public void listarTodas() {
-		
-		for(Conta conta : listaContas) {
+
+		for (Conta conta : listaContas) {
 			conta.visualizar();
 		}
-		
+
 		if (listaContas.isEmpty()) {
-			System.out.println(Cores.TEXT_RED_BOLD_BRIGHT + "Não há contas cadastradas.\n" + Cores.TEXT_RESET);
+			System.err.println("Erro: Não há contas cadastradas.");
 		}
 
 	}
@@ -36,7 +40,8 @@ public class ContaController implements ContaRepository {
 	@Override
 	public void cadastrar(Conta conta) {
 		listaContas.add(conta);
-		System.out.printf("A conta número %d foi criada com êxito.\n\n", conta.getNumero());
+		System.out.println(Cores.TEXT_GREEN_BOLD_BRIGHT + "\n*** A conta número " + numero
+				+ " foi criada com êxito. ***" + Cores.TEXT_RESET);
 	}
 
 	@Override
@@ -47,7 +52,16 @@ public class ContaController implements ContaRepository {
 
 	@Override
 	public void deletar(int numero) {
-		// TODO Auto-generated method stub
+
+		var conta = buscarNaCollection(numero);
+
+		if (conta != null) {
+			if (listaContas.remove(conta) == true) {
+				System.out.println(Cores.TEXT_GREEN_BOLD_BRIGHT + "\n*** A conta número " + numero
+						+ " foi deletada com êxito. ***" + Cores.TEXT_RESET);
+			}
+		} else
+			System.err.println("Erro: A conta número " + numero + " não foi encontrada.");
 
 	}
 
@@ -73,6 +87,15 @@ public class ContaController implements ContaRepository {
 
 	public int gerarNumero() {
 		return ++numero;
+	}
+
+	public Conta buscarNaCollection(int numero) {
+		for (var conta : listaContas) {
+			if (conta.getNumero() == numero)
+				return conta;
+		}
+
+		return null;
 	}
 
 }

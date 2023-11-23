@@ -1,5 +1,7 @@
 package conta_bancaria;
 
+import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import conta_bancaria.controller.ContaController;
@@ -26,7 +28,7 @@ public class Menu {
 			System.out.println("");
 			System.out.println("\t1 - Criar Conta");
 			System.out.println("\t2 - Listar todas as Contas");
-			System.out.println("\t3 - Buscar Conta por Numero");
+			System.out.println("\t3 - Buscar Conta por número");
 			System.out.println("\t4 - Atualizar Dados da Conta");
 			System.out.println("\t5 - Apagar Conta");
 			System.out.println("\t6 - Sacar");
@@ -37,19 +39,29 @@ public class Menu {
 			System.out.println(separador);
 			System.out.println("\n*** Entre com a opção desejada:");
 			System.out.print("\n >>> ");
-			operacao = sc.nextInt();
+
+			try {
+				operacao = sc.nextInt();
+			} catch (InputMismatchException e) {
+				System.err.println("\tDigite valores inteiros.");
+				sc.nextLine();
+				operacao = 0;
+			}
 
 			switch (operacao) {
 			case 1 -> criarConta();
 			case 2 -> listarContas();
-			case 3 -> System.out.println("Opção 3 - Buscar Conta por número");
+			case 3 -> buscarPorNumero();
 			case 4 -> System.out.println("Opção 4 - Atualizar Dados da Conta");
-			case 5 -> System.out.println("Opção 5 - Apagar Conta");
+			case 5 -> deletarConta();
 			case 6 -> System.out.println("Opção 6 - Sacar");
 			case 7 -> System.out.println("Opção 7 - Depositar");
 			case 8 -> System.out.println("Opção 8 - Transferir valores entre Contas");
 			case 9 -> Finalizar();
-			default -> System.out.println(Cores.TEXT_RED_BOLD_BRIGHT + "\n\tOperação inválida! \n" + Cores.TEXT_RESET);
+			default -> {
+				System.err.println("Erro: Operação inválida!");
+				keyPress();
+			}
 			}
 		}
 
@@ -57,7 +69,7 @@ public class Menu {
 
 	static ContaController contas = new ContaController();
 
-	static int numero, agencia, tipo, aniversario;
+	static int numero, agencia, tipoDeConta, aniversario;
 	static String titular;
 	static float saldo, limite;
 
@@ -70,31 +82,57 @@ public class Menu {
 		titular = sc.next();
 
 		System.out.println("Digite o tipo da conta: 1 - CC / 2 - CP");
-		tipo = sc.nextInt();
-		
+		tipoDeConta = sc.nextInt();
+
 		System.out.println("Digite o saldo da conta: ");
 		saldo = sc.nextFloat();
-		
-		switch (tipo) {
+
+		// Verifica se a conta é corrente ou poupança
+		switch (tipoDeConta) {
+		// Se for Conta Corrente
 		case 1 -> {
 			System.out.println("Digite o limite da conta: ");
 			limite = sc.nextFloat();
-			contas.cadastrar(new ContaCorrente(contas.gerarNumero(), agencia, tipo, titular, saldo, limite));
+			contas.cadastrar(new ContaCorrente(contas.gerarNumero(), agencia, tipoDeConta, titular, saldo, limite));
 		}
+		// Se for Conta Poupança
 		case 2 -> {
 			System.out.println("Digite o aniversário da conta: ");
 			aniversario = sc.nextInt();
-			contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), agencia, tipo, titular, saldo, aniversario));
+			contas.cadastrar(
+					new ContaPoupanca(contas.gerarNumero(), agencia, tipoDeConta, titular, saldo, aniversario));
 		}
+		}
+		keyPress();
 	}
 
+	private static void buscarPorNumero() {
+
+		System.out.println(
+				Cores.TEXT_PURPLE_BOLD_BRIGHT + "*** Opção 3 - Buscar conta por número ***\n" + Cores.TEXT_RESET);
+
+		System.out.println("Digite o número da conta : ");
+		numero = sc.nextInt();
+		contas.procurarPorNumero(numero);
+		keyPress();
+	}
+
+	private static void deletarConta() {
+		System.out.println(Cores.TEXT_PURPLE_BOLD_BRIGHT + "*** Opção 5 - Deletar Conta ***\n" + Cores.TEXT_RESET);
+
+		System.out.println("Digite o número da conta : ");
+		numero = sc.nextInt();
+		contas.deletar(numero);
+		keyPress();
 	}
 
 	private static void listarContas() {
-		System.out.println(Cores.TEXT_PURPLE_BOLD_BRIGHT + "*** Opção 2 - Listar todas as Contas ***\n" + Cores.TEXT_RESET);
+		System.out.println(
+				Cores.TEXT_PURPLE_BOLD_BRIGHT + "*** Opção 2 - Listar todas as Contas ***\n" + Cores.TEXT_RESET);
 		contas.listarTodas();
+		keyPress();
 	}
-	
+
 	private static void Finalizar() {
 		System.out.println("\nOpção 9 - Sair\n");
 
@@ -103,20 +141,31 @@ public class Menu {
 		System.out.println("\t\tTyche Bank");
 		System.out.println("");
 		System.out.println(separador);
-		Creditos();
+		Sobre();
 		sc.close();
 		System.exit(0);
 
 	}
 
-	private static void Creditos() {
-		System.out.println();
-		System.out.println(separador);
+	private static void Sobre() {
+		System.out.println("\n" + separador);
 		System.out.println(
 				"\nProjeto desenvolvido por " + Cores.TEXT_CYAN_BOLD_BRIGHT + "Matheus Teixeira" + Cores.TEXT_RESET);
 		System.out.println("\nCódigo disponível em: \n" + Cores.TEXT_BLUE_UNDERLINED + urlRepo + Cores.TEXT_RESET);
-		System.out.println(separador);
+		System.out.println(separador + Cores.TEXT_RESET);
 
+	}
+
+	public static void keyPress() {
+
+		try {
+
+			System.out.println("\n\nPressione a tecla Enter para continuar");
+			System.in.read();
+
+		} catch (IOException e) {
+			System.err.println("Erro: Você pressionou uma tecla inválida!");
+		}
 	}
 
 }
