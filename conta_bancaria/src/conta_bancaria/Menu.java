@@ -52,7 +52,18 @@ public class Menu {
 			case 1 -> criarConta();
 			case 2 -> listarContas();
 			case 3 -> buscarPorNumero();
-			case 4 -> System.out.println("Opção 4 - Atualizar Dados da Conta");
+			case 4 -> {
+				
+				System.out.println("Opção 4 - Atualizar Dados da Conta");
+				
+				System.out.println("Digite o número da conta: ");
+				numero = sc.nextInt();
+				if (contas.buscarNaCollection(numero).isPresent()) {
+					
+				} else {
+					System.err.println("Erro: A conta número " + numero + " não foi encontrada.");
+				}
+			}
 			case 5 -> deletarConta();
 			case 6 -> System.out.println("Opção 6 - Sacar");
 			case 7 -> System.out.println("Opção 7 - Depositar");

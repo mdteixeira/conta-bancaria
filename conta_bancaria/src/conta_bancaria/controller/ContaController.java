@@ -1,6 +1,7 @@
 package conta_bancaria.controller;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import conta_bancaria.model.Conta;
 import conta_bancaria.repository.ContaRepository;
@@ -16,10 +17,10 @@ public class ContaController implements ContaRepository {
 
 	@Override
 	public void procurarPorNumero(int numero) {
-		var conta = buscarNaCollection(numero);
+		Optional<Conta> conta = buscarNaCollection(numero);
 
-		if (conta != null)
-			conta.visualizar();
+		if (conta.isPresent())
+			conta.get().visualizar();
 		else
 			System.err.println("Erro: A conta número " + numero + " não foi encontrada.");
 	}
@@ -53,10 +54,10 @@ public class ContaController implements ContaRepository {
 	@Override
 	public void deletar(int numero) {
 
-		var conta = buscarNaCollection(numero);
+		Optional<Conta> conta = buscarNaCollection(numero);
 
-		if (conta != null) {
-			if (listaContas.remove(conta) == true) {
+		if (conta.isPresent()) {
+			if (listaContas.remove(conta.get()) == true) {
 				System.out.println(Cores.TEXT_GREEN_BOLD_BRIGHT + "\n*** A conta número " + numero
 						+ " foi deletada com êxito. ***" + Cores.TEXT_RESET);
 			}
@@ -89,13 +90,13 @@ public class ContaController implements ContaRepository {
 		return ++numero;
 	}
 
-	public Conta buscarNaCollection(int numero) {
+	public Optional<Conta> buscarNaCollection(int numero) {
 		for (var conta : listaContas) {
 			if (conta.getNumero() == numero)
-				return conta;
+				return Optional.of(conta);
 		}
 
-		return null;
+		return Optional.empty();
 	}
 
 }
