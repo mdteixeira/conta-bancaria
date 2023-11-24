@@ -47,8 +47,15 @@ public class ContaController implements ContaRepository {
 
 	@Override
 	public void atualizar(Conta conta) {
-		// TODO Auto-generated method stub
 
+		Optional<Conta> buscaConta = buscarNaCollection(numero);
+
+		if (buscaConta.isPresent()) {
+			listaContas.set(listaContas.indexOf(buscaConta.get()), conta);
+			System.out.println(Cores.TEXT_GREEN_BOLD_BRIGHT + "\n*** A conta número " + conta.getNumero()
+					+ " foi atualizada com êxito. ***" + Cores.TEXT_RESET);
+		} else
+			System.err.println("Erro: A conta número " + conta.getNumero() + " não foi encontrada.");
 	}
 
 	@Override
@@ -68,19 +75,46 @@ public class ContaController implements ContaRepository {
 
 	@Override
 	public void sacar(int numero, float valor) {
-		// TODO Auto-generated method stub
+
+		Optional<Conta> conta = buscarNaCollection(numero);
+
+		if (conta.isPresent()) {
+			if (conta.get().Sacar(valor) == true) {
+				System.out.println("O saque da conta número " + numero + "foi efetuado com sucesso.");
+			} else {
+				System.err.println("Erro: A conta " + numero + "não foi encontrada.");
+			}
+		}
 
 	}
 
 	@Override
 	public void depositar(int numero, float valor) {
-		// TODO Auto-generated method stub
 
+		Optional<Conta> conta = buscarNaCollection(numero);
+
+		if (conta.isPresent()) {
+			conta.get().depositar(valor);
+			System.out.println("O depósito de R$" + valor + " na conta número " + numero + "foi efetuado com sucesso.");
+		} else {
+			System.err.println("Erro: A conta " + numero + "não foi encontrada.");
+		}
 	}
 
 	@Override
 	public void transferir(int numeroOrigem, int numeroDestino, float valor) {
-		// TODO Auto-generated method stub
+		
+		Optional<Conta> contaOrigem = buscarNaCollection(numeroOrigem);
+		Optional<Conta> contaDestino = buscarNaCollection(numeroDestino);
+
+		if (contaOrigem.isPresent() && contaDestino.isPresent()) {
+			if(contaOrigem.get().Sacar(valor) == true) {
+				contaDestino.get().depositar(valor);
+				System.out.println("O transferência de R$" + valor + " da conta número " + numeroOrigem + " para a conta número " + numeroDestino + "foi efetuado com sucesso.");
+			}
+		} else {
+			System.err.println("Erro: A conta " + numero + "não foi encontrada.");
+		}
 
 	}
 

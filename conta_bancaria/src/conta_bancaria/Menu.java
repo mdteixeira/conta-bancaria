@@ -2,9 +2,11 @@ package conta_bancaria;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
+import java.util.Optional;
 import java.util.Scanner;
 
 import conta_bancaria.controller.ContaController;
+import conta_bancaria.model.Conta;
 import conta_bancaria.model.ContaCorrente;
 import conta_bancaria.model.ContaPoupanca;
 import conta_bancaria.util.Cores;
@@ -17,7 +19,7 @@ public class Menu {
 			+ Cores.TEXT_RESET;
 
 	public static void main(String[] args) {
-
+		
 		int operacao = 0;
 
 		while (true) {
@@ -54,20 +56,94 @@ public class Menu {
 			case 3 -> buscarPorNumero();
 			case 4 -> {
 				
-				System.out.println("Opção 4 - Atualizar Dados da Conta");
+				System.out.println(Cores.TEXT_PURPLE_BOLD_BRIGHT + "*** Opção 4 - Atualizar Conta ***\n" + Cores.TEXT_RESET);
 				
 				System.out.println("Digite o número da conta: ");
 				numero = sc.nextInt();
-				if (contas.buscarNaCollection(numero).isPresent()) {
+				Optional<Conta> conta = contas.buscarNaCollection(numero);
+				
+				if (conta.isPresent()) {
+					
+					System.out.println("Digite o número da Agência: ");
+					agencia = sc.nextInt();
+
+					System.out.println("Digite o nome do titular: ");
+					titular = sc.next();
+
+					conta.get().getTipo();
+
+					System.out.println("Digite o saldo da conta: ");
+					saldo = sc.nextFloat();
+					
+					// Verifica se a conta é corrente ou poupança
+					switch (tipoDeConta) {
+					// Se for Conta Corrente
+					case 1 -> {
+						System.out.println("Digite o limite da conta: ");
+						limite = sc.nextFloat();
+						contas.atualizar(new ContaCorrente(numero, agencia, tipoDeConta, titular, saldo, limite));
+					}
+					// Se for Conta Poupança
+					case 2 -> {
+						System.out.println("Digite o aniversário da conta: ");
+						aniversario = sc.nextInt();
+						contas.atualizar(
+								new ContaPoupanca(numero, agencia, tipoDeConta, titular, saldo, aniversario));
+					}
+					}
+					keyPress();
 					
 				} else {
 					System.err.println("Erro: A conta número " + numero + " não foi encontrada.");
 				}
 			}
 			case 5 -> deletarConta();
-			case 6 -> System.out.println("Opção 6 - Sacar");
-			case 7 -> System.out.println("Opção 7 - Depositar");
-			case 8 -> System.out.println("Opção 8 - Transferir valores entre Contas");
+			case 6 -> {
+				
+				float valor;
+				
+				System.out.println("Opção 6 - Sacar");
+				
+				System.out.println("Digite o número da conta: ");
+				numero = sc.nextInt();
+				
+				
+				System.out.println("Digite o valor do saque: ");
+				valor = sc.nextFloat();
+				
+				contas.sacar(numero, valor);
+				
+			}
+			case 7 -> {
+				System.out.println("Opção 7 - Depositar");
+				
+				
+				float valor;
+				
+				System.out.println("Digite o número da conta: ");
+				numero = sc.nextInt();
+				
+				System.out.println("Digite o valor do depósito: ");
+				valor = sc.nextFloat();
+				
+				contas.depositar(numero, valor);
+			}
+			case 8 -> {
+				System.out.println("Opção 8 - Transferir valores entre Contas");
+
+				int numeroOrigem, numeroDestino;
+				float valor;
+				
+				System.out.println("Digite o número da conta de origem: ");
+				numeroOrigem = sc.nextInt();
+				System.out.println("Digite o número da conta de destino: ");
+				numeroDestino = sc.nextInt();
+				System.out.println("Digite o valor da transferência: ");
+				valor = sc.nextFloat();
+				
+				contas.transferir(numeroOrigem, numeroDestino, valor);
+				
+			}
 			case 9 -> Finalizar();
 			default -> {
 				System.err.println("Erro: Operação inválida!");
